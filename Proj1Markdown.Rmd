@@ -7,27 +7,41 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lubridate)
+library(skimr)
+library(survival)
+library(survminer)
+library(reReg)
+library(KMsurv)
+library(Ecdat)
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
 ```{r cars}
-summary(cars)
-head(cars)
-#some test stuff
+#data repo: https://github.com/bobbyjy/MyData
+
+#load dataset into git repo
+thePath="https://raw.githubusercontent.com/bobbyjy/MyData/main/"
+
+#update with file name for project 1
+ds=read_csv(paste(thePath,"hccStudy-formatted.txt",sep="/"))
 
 ```
+```{r}
+#sample_n(ds,25) to take a random 25 samples from your data set
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+#Lollipop chart Example:
+# sample_ds %>% 
+#   ggplot()+
+#   geom_segment(aes(x=0,y=fct_reorder(studentID, SATmin,.desc=TRUE), xend=SATmin, yend=fct_reorder(studentID, SATmin,.desc=TRUE)), color = "blue2", show.legend = FALSE)+
+#   geom_point(aes(x = SATmin, y = studentID, alpha = SATmin), size = 4, color = "blue2", show.legend = FALSE)+
+#   CoreyPlotTheme+
+#   labs(y = "Student ID", x = "Time (mins)", title = "Sample Student SAT Times")
+ 
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+
+
