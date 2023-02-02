@@ -32,14 +32,45 @@ ds=read_csv(paste(thePath,"hccStudy-formatted.txt",sep="/"))
 #sample_n(ds,25) to take a random 25 samples from your data set
 
 #Lollipop chart Example:
-# sample_ds %>% 
-#   ggplot()+
-#   geom_segment(aes(x=0,y=fct_reorder(studentID, SATmin,.desc=TRUE), xend=SATmin, yend=fct_reorder(studentID, SATmin,.desc=TRUE)), color = "blue2", show.legend = FALSE)+
-#   geom_point(aes(x = SATmin, y = studentID, alpha = SATmin), size = 4, color = "blue2", show.legend = FALSE)+
-#   CoreyPlotTheme+
-#   labs(y = "Student ID", x = "Time (mins)", title = "Sample Student SAT Times")
+sample_ds %>%
+  ggplot()+
+  geom_segment(aes(x=0,y=fct_reorder(studentID, SATmin,.desc=TRUE), xend=SATmin, yend=fct_reorder(studentID, SATmin,.desc=TRUE)), color = "blue2", show.legend = FALSE)+
+  geom_point(aes(x = SATmin, y = studentID, alpha = SATmin), size = 4, color = "blue2", show.legend = FALSE)+
+  CoreyPlotTheme+
+  labs(y = "Student ID", x = "Time (mins)", title = "Sample Student SAT Times")
  
 ```
+
+```{r}
+#some summary stats
+ds %>% 
+  summarise(mean=mean(sec_hours), min = min(sec_hours), quant25 = quantile(sec_hours, .25), median = quantile(sec_hours, .5), quant75 = quantile(sec_hours, .75), quant90 = quantile(sec_hours, .9), max = max(sec_hours), studentcount =n())
+```
+
+```{r}
+#without censoring
+km.nocensoring=survfit(Surv(scds1$time,rep(1,nrow(scds1)))~1)
+
+#with censoring
+km.censoring =survfit(Surv(scds1$time,scds1$status)~1)
+summary(km.censoring)
+
+#with groups
+km = survfit(Surv(rats2.2$timeElapsed,rats2.2$status)~rats2.2$trt)
+
+#with strata
+ggsurvplot(fit=km.strata, data=ds,
+           legend = "bottom", risk.table = F,conf.int=F,linetype = "strata") +
+    labs(
+        title="Survival Curve for Pharmaco Study",
+        x="Time to Relapse)"
+    ) 
+
+#hypothesis test
+survdiff(Surv(ds$ttr,ds$relapse)~ds$grp + strata(ds$ageGroup2))
+```
+
+
 
 
 
