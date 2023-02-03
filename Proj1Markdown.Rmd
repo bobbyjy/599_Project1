@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(lubridate)
 library(skimr)
-library(survival)
+library(survival)# a change
 library(survminer)
 library(reReg)
 library(KMsurv)
@@ -20,9 +20,7 @@ This is a study of Natural vs Anthropogenic soils for
 
 ```{r}
 #data repo: https://github.com/bobbyjy/MyData
-ant<-Anthropogenic %>% mutate(anthro=1)
-nat<-Natural %>% mutate(anthro=0)
-coraldf <- combine(ant,nat)
+
 #load dataset into git repo
 thePath="https://raw.githubusercontent.com/bobbyjy/MyData/main/"
 
@@ -34,6 +32,10 @@ thePath="https://raw.githubusercontent.com/bobbyjy/MyData/main/"
 
 #update with file name for project 1
 Nat=read_csv(paste(thePath,"Natural.csv",sep="/"))
+
+Anth<-Anth %>% mutate(anthro=1)
+Nat<-Nat %>% mutate(anthro=0)
+coraldf <- combine(Anth,Nat)
 
 ```
 ```{r}
