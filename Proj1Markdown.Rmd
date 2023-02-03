@@ -149,15 +149,17 @@ coraldf$Sediment<-as.factor(coraldf$Sediment)
 coraldf$Temperature<-as.factor(coraldf$Temperature)
 
 
+
 coraldf %>%
-  group_by(Sediment, anthro, Temperature)%>%summarise(Time=mean(Time))%>%
-  ggplot()+
-  geom_segment(aes(x=0,y=fct_reorder(Sediment, Time,.desc=TRUE), xend=Time, yend=fct_reorder(Sediment, Time,.desc=TRUE)),
-               color = "blue2")+
-  geom_point(aes(x = Time, y = Sediment,size = -as.numeric(Sediment),color=Sediment), show.legend = FALSE)+
-  facet_grid(anthro~Temperature)
+    group_by(Sediment, anthro, Temperature)%>%summarise(Time=mean(Time))%>%
+    ggplot()+
+    geom_bar(aes(x=Time,y=Sediment),stat='identity',
+                 color = "blue2",width=.01)+
+    geom_point(aes(x = Time, y = Sediment,size = -as.numeric(Sediment)), show.legend = FALSE,color='blue2')+
+    facet_grid(anthro~Temperature)
   CoreyPlotTheme+
-  labs(y = "Sediment", x = "Time", title = "Coral survival time")
+    labs(y = "Sediment", x = "Time", title = "Coral survival time")
+  
   ```
 
 
