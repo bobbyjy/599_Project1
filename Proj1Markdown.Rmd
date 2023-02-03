@@ -39,6 +39,72 @@ coraldf <- combine(Anth,Nat)
 
 ```
 ```{r}
+#comparing temperature and survival
+Temp <- coraldf %>% select(Temperature, Time, Status)
+km.Temp =survfit(Surv(Temp$Time,Temp$Status)~Temp$Temperature)
+
+ggsurvplot(fit=km.Temp, data=Temp,
+           legend = "bottom", risk.table = F,conf.int=T,linetype = "strata", legend.title = "Study Temperatures") +
+    labs(
+        title="Survival as 26 vs. 30 Degrees C",
+        x="Time Until Death"
+    ) 
+```
+
+```{r}
+#compare between Nat at different sediment levels 
+Nat30 <- Nat %>% filter(Temperature ==30)
+km.Nat30 =survfit(Surv(Nat30$Time,Nat30$Status)~Nat30$Sediment)
+
+ggsurvplot(fit=km.Nat30, data=Nat30,
+           legend = "bottom", risk.table = F,conf.int=F, legend.title = "Study Sediment Levels", alpha=.5) +
+    labs(
+        title="Survival Using Natural Sediments at 4 Levels",
+        x="Time Until Death"
+    ) 
+```
+```{r}
+#compare between Anth at different sediment levels 
+Anth30 <- Anth %>% filter(Temperature ==30)
+km.Anth30 =survfit(Surv(Anth30$Time,Anth30$Status)~Anth30$Sediment)
+
+ggsurvplot(fit=km.Anth30, data=Anth30,
+           legend = "bottom", risk.table = F,conf.int=F,linetype = "strata", legend.title = "Study Sediment Levels") +
+    labs(
+        title="Survival Using Anthropgenic Sediments at 4 Levels",
+        x="Time Until Death"
+    ) 
+```
+```{r}
+#compare between Anth and Nat at 30 degrees
+Both30 <- coraldf %>% filter(Temperature ==30)
+km.Both30 =survfit(Surv(Both30$Time,Both30$Status)~Both30$anthro)
+
+ggsurvplot(fit=km.Both30, data=Both30,
+           legend = "bottom", risk.table = F,conf.int=F, legend.title = "Anth or Nat", surv.median.line = "v") +
+    labs(
+        title="Anthro vs. Natural at Predicted Global Warming Temp (30C)",
+        x="Time Until Death"
+    ) 
+```
+
+```{r}
+#compare between Anth and Nat at 30 degrees
+Both26 <- coraldf %>% filter(Temperature ==26)
+km.Both26 =survfit(Surv(Both26$Time,Both26$Status)~Both26$anthro)
+
+ggsurvplot(fit=km.Both26, data=Both26,
+           legend = "bottom", risk.table = F,conf.int=F,linetype = "strata", legend.title = "Anth or Nat", surv.median.line = "v") +
+    labs(
+        title="Anthro vs. Natural at 26 Degrees C",
+        x="Time Until Death"
+    ) 
+```
+
+
+
+```{r}
+#comparing temperature and
 Anth <- Anth %>% mutate(anthro=1)
 Nat <- Nat %>% mutate(anthro=0)
 coraldf <- combine(Anth,Nat)
