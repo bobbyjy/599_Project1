@@ -18,14 +18,20 @@ library(Ecdat)
 ```
 
 
-```{r cars}
+```{r}
 #data repo: https://github.com/bobbyjy/MyData
 
 #load dataset into git repo
 thePath="https://raw.githubusercontent.com/bobbyjy/MyData/main/"
 
 #update with file name for project 1
-ds=read_csv(paste(thePath,"hccStudy-formatted.txt",sep="/"))
+Anth=read_csv(paste(thePath,"Anthropogenic.csv",sep="/"))
+
+#load dataset into git repo
+thePath="https://raw.githubusercontent.com/bobbyjy/MyData/main/"
+
+#update with file name for project 1
+Anth=read_csv(paste(thePath,"Natural.csv",sep="/"))
 
 ```
 ```{r}
