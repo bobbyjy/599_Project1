@@ -33,34 +33,16 @@ thePath="https://raw.githubusercontent.com/bobbyjy/MyData/main/"
 #update with file name for project 1
 Nat=read_csv(paste(thePath,"Natural.csv",sep="/"))
 
-Nat
-Nat %>% 
-  filter(Temperature) %>% 
-  group_by(Temperature) %>% 
-  distinct()
-
 Anth<-Anth %>% mutate(anthro=1)
 Nat<-Nat %>% mutate(anthro=0)
 coraldf <- combine(Anth,Nat)
 
-
-
-df30 <- coraldf %>% filter(Sediment == 120)
-df30
-
-km.30=survfit(Surv(df30$Time,df30$Status)~df30$anthro) #defines your strata!
-
-ggsurvplot(fit=km.30, data=df30,
-           legend = "bottom", risk.table = F,conf.int=F,linetype = "strata") +
-    labs(
-        title="Survival Curve for Pharmaco Study",
-        x="Time to Relapse)"
-    ) 
-
-
 ```
 ```{r}
-
+Anth <- Anth %>% mutate(anthro=1)
+Nat <- Nat %>% mutate(anthro=0)
+coraldf <- combine(Anth,Nat)
+coraldf
 
 #groups are the sediment
 #sediment values for sed valyues
@@ -161,7 +143,22 @@ ggsurvplot(fit=km.strata, data=ds,
 #hypothesis test
 survdiff(Surv(ds$ttr,ds$relapse)~ds$grp + strata(ds$ageGroup2))
 ```
+```{r}
 
+coraldf$Sediment<-as.factor(coraldf$Sediment)
+coraldf$Temperature<-as.factor(coraldf$Temperature)
+
+
+coraldf %>%
+  group_by(Sediment, anthro, Temperature)%>%summarise(Time=mean(Time))%>%
+  ggplot()+
+  geom_segment(aes(x=0,y=fct_reorder(Sediment, Time,.desc=TRUE), xend=Time, yend=fct_reorder(Sediment, Time,.desc=TRUE)),
+               color = "blue2")+
+  geom_point(aes(x = Time, y = Sediment,size = -as.numeric(Sediment),color=Sediment), show.legend = FALSE)+
+  facet_grid(anthro~Temperature)
+  CoreyPlotTheme+
+  labs(y = "Sediment", x = "Time", title = "Coral survival time")
+  ```
 
 
 
