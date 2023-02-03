@@ -33,16 +33,34 @@ thePath="https://raw.githubusercontent.com/bobbyjy/MyData/main/"
 #update with file name for project 1
 Nat=read_csv(paste(thePath,"Natural.csv",sep="/"))
 
+Nat
+Nat %>% 
+  filter(Temperature) %>% 
+  group_by(Temperature) %>% 
+  distinct()
+
 Anth<-Anth %>% mutate(anthro=1)
 Nat<-Nat %>% mutate(anthro=0)
 coraldf <- combine(Anth,Nat)
 
+
+
+df30 <- coraldf %>% filter(Sediment == 120)
+df30
+
+km.30=survfit(Surv(df30$Time,df30$Status)~df30$anthro) #defines your strata!
+
+ggsurvplot(fit=km.30, data=df30,
+           legend = "bottom", risk.table = F,conf.int=F,linetype = "strata") +
+    labs(
+        title="Survival Curve for Pharmaco Study",
+        x="Time to Relapse)"
+    ) 
+
+
 ```
 ```{r}
-Anth <- Anth %>% mutate(anthro=1)
-Nat <- Nat %>% mutate(anthro=0)
-coraldf <- combine(Anth,Nat)
-coraldf
+
 
 #groups are the sediment
 #sediment values for sed valyues
