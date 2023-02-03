@@ -31,9 +31,73 @@ Anth=read_csv(paste(thePath,"Anthropogenic.csv",sep="/"))
 thePath="https://raw.githubusercontent.com/bobbyjy/MyData/main/"
 
 #update with file name for project 1
-Anth=read_csv(paste(thePath,"Natural.csv",sep="/"))
+Nat=read_csv(paste(thePath,"Natural.csv",sep="/"))
 
 ```
+```{r}
+Anth <- Anth %>% mutate(anthro=1)
+Nat <- Nat %>% mutate(anthro=0)
+coraldf <- combine(Anth,Nat)
+coraldf
+
+#groups are the sediment
+#sediment values for sed valyues
+Anth
+km.censoring =survfit(Surv(Anth$Time,Anth$Status)~1)
+
+
+ggsurvplot(fit=km.censoring, data=Anth,
+           legend = "bottom", risk.table = F,conf.int=F,linetype = "strata") +
+    labs(
+        title="Survival Curve for Pharmaco Study",
+        x="Time to Relapse)"
+    ) 
+
+
+Nat
+km.censoring =survfit(Surv(Nat$Time,Nat$Status)~1)
+
+
+km.strata=survfit(Surv(coraldf$Time,coraldf$Status)~coraldf$anthro + strata(coraldf$Sediment)) #defines your strata!
+
+ggsurvplot(fit=km.strata, data=coraldf,
+           legend = "bottom", risk.table = F,conf.int=F,linetype = "strata") +
+    labs(
+        title="Survival Curve for Pharmaco Study",
+        x="Time to Relapse)"
+    ) 
+
+km.strata=survfit(Surv(coraldf$Time,coraldf$Status)~coraldf$anthro) #defines your strata!
+
+ggsurvplot(fit=km.strata, data=coraldf,
+           legend = "bottom", risk.table = F,conf.int=F,linetype = "strata") +
+    labs(
+        title="Survival Curve for Pharmaco Study",
+        x="Time to Relapse)"
+    ) 
+
+survdiff(Surv(coraldf$Time,coraldf$Status)~coraldf$anthro + strata(coraldf$Sediment))
+
+
+survdiff(Surv(coraldf$Time,coraldf$Status)~coraldf$anthro)
+
+
+```
+```{r}
+
+km.strata=survfit(Surv(coraldf$Time,coraldf$Status)~coraldf$Sediment) #defines your strata!
+
+ggsurvplot(fit=km.strata, data=coraldf,
+           legend = "bottom", risk.table = F,conf.int=F, legend.title = "Sediment Concentration",) +
+    labs(
+        title="Survival Curve for Pharmaco Study",
+        x="Weeks to Coral Death"
+    ) 
+
+survdiff(Surv(coraldf$Time,coraldf$Status)~coraldf$Sediment)
+
+```
+
 ```{r}
 #sample_n(ds,25) to take a random 25 samples from your data set
 
