@@ -20,7 +20,9 @@ library(Ecdat)
 
 ```{r}
 #data repo: https://github.com/bobbyjy/MyData
-
+Anthropogenic %>% mutate(anthro=1)
+Natural %>% mutate(anthro=0)
+coraldf <- combine(Anthropogenic,Natural)
 #load dataset into git repo
 thePath="https://raw.githubusercontent.com/bobbyjy/MyData/main/"
 
