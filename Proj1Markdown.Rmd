@@ -16,11 +16,13 @@ library(reReg)
 library(KMsurv)
 library(Ecdat)
 ```
-
+This is a study of Natural vs Anthropogenic soils for 
 
 ```{r}
 #data repo: https://github.com/bobbyjy/MyData
-
+ant<-Anthropogenic %>% mutate(anthro=1)
+nat<-Natural %>% mutate(anthro=0)
+coraldf <- combine(ant,nat)
 #load dataset into git repo
 thePath="https://raw.githubusercontent.com/bobbyjy/MyData/main/"
 
