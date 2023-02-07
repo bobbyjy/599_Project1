@@ -44,13 +44,14 @@ Temp <- coraldf %>% select(Temperature, Time, Status)
 km.Temp =survfit(Surv(Temp$Time,Temp$Status)~Temp$Temperature)
 
 p <- ggsurvplot(fit=km.Temp, data=Temp,
-           legend = "bottom", risk.table = F,conf.int=T, legend.title = "Study Temperatures") +
+           legend = "bottom", risk.table = F,conf.int=F, legend.title = "Study Temperatures: ") +
     labs(
         title="Visualizing the Impact of Global Warming on Coral Populations",
+        subtitle = "Observing Coral Survival in 26C and 30C Groups",
         x="Time Until Coral Death (Weeks)"
     ) 
 
-p$plot + scale_colour_manual(values = c("red", "turquoise1"))+
+p$plot + scale_colour_manual(values = c("turquoise1", "red"))+
   theme(panel.background = element_rect(fill = "grey12"),
         plot.background = element_rect(fill="grey12"),
         axis.text.x=element_text(colour="white"),
@@ -59,12 +60,20 @@ p$plot + scale_colour_manual(values = c("red", "turquoise1"))+
         axis.title.x = element_text(colour = "white"),
         axis.title.y = element_text(colour = "white"),
         axis.line.x = element_line(color="white"),
-        axis.line.y = element_line(color="white"))
+        axis.line.y = element_line(color="white"),
+        legend.key = element_rect(fill = "grey12"),
+        legend.background = element_rect(fill="grey12"),
+        legend.text = element_text(color = "white"),
+        legend.title = element_text(color = "white"),
+        plot.subtitle = element_text(color="white"))+
+   annotate("text", x = 2, y = .25, label = "30C Group", color = "red", fontface = "bold")+
+  annotate("text", x = 6, y = .65, label = "26C Group", color = "turquoise1", fontface = "bold")
 
 #add annotation labels for the temp groups
 #fix legend background
+setwd("C:\\Users\\corey\\OneDrive\\Documents\\GitHub\\599_Project1")
+ggsave("GlobalWarmingImpact.png", dpi = 300)
 
-p$plot
 
 ```
 
@@ -73,12 +82,35 @@ p$plot
 Nat30 <- Nat %>% filter(Temperature ==30)
 km.Nat30 =survfit(Surv(Nat30$Time,Nat30$Status)~Nat30$Sediment)
 
-ggsurvplot(fit=km.Nat30, data=Nat30,
+p2 <- ggsurvplot(fit=km.Nat30, data=Nat30,
            legend = "bottom", risk.table = F,conf.int=F, legend.title = "Study Sediment Levels", alpha=.5) +
     labs(
         title="Survival Using Natural Sediments at 4 Levels",
+        subtitle = "No Significant Difference Observed",
         x="Time Until Death"
     ) 
+
+p2$plot+  scale_colour_manual(values = c("turquoise1", "magenta","green","yellow"))+
+  #scale_color_brewer(palette = "Accent")+
+  theme(panel.background = element_rect(fill = "grey12"),
+        plot.background = element_rect(fill="grey12"),
+        axis.text.x=element_text(colour="white"),
+        axis.text.y=element_text(colour="white"),
+        plot.title = element_text(colour = "white"),
+        axis.title.x = element_text(colour = "white"),
+        axis.title.y = element_text(colour = "white"),
+        axis.line.x = element_line(color="white"),
+        axis.line.y = element_line(color="white"),
+        legend.key = element_rect(fill = "grey12"),
+        legend.background = element_rect(fill="grey12"),
+        legend.text = element_text(color = "white"),
+        legend.title = element_text(color = "white"),
+        plot.subtitle = element_text(color="white"))
+
+setwd("C:\\Users\\corey\\OneDrive\\Documents\\GitHub\\599_Project1")
+ggsave("NaturalSedimentLevels.png", dpi = 300)
+  # annotate("text", x = 2, y = .25, label = "30C Group", color = "red", fontface = "bold")+
+  #annotate("text", x = 6, y = .65, label = "26C Group", color = "turquoise1", fontface = "bold")
 ```
 ```{r}
 #compare between Anth at different sediment levels 
@@ -97,12 +129,34 @@ ggsurvplot(fit=km.Nat30, data=Nat30,
 Both30 <- coraldf %>% filter(Temperature ==30)
 km.Both30 =survfit(Surv(Both30$Time,Both30$Status)~Both30$anthro)
 
-ggsurvplot(fit=km.Both30, data=Both30,
+p3 <- ggsurvplot(fit=km.Both30, data=Both30,
            legend = "bottom", risk.table = F,conf.int=F, legend.title = "Anth or Nat", surv.median.line = "v") +
     labs(
         title="Anthro vs. Natural at Predicted Global Warming Temp (30C)",
         x="Time Until Death"
     ) 
+
+p3$plot+ scale_colour_manual(values = c("green", "grey70"))+
+  theme(panel.background = element_rect(fill = "grey12"),
+        plot.background = element_rect(fill="grey12"),
+        axis.text.x=element_text(colour="white"),
+        axis.text.y=element_text(colour="white"),
+        plot.title = element_text(colour = "white"),
+        axis.title.x = element_text(colour = "white"),
+        axis.title.y = element_text(colour = "white"),
+        axis.line.x = element_line(color="white"),
+        axis.line.y = element_line(color="white"),
+        legend.key = element_rect(fill = "grey12"),
+        legend.background = element_rect(fill="grey12"),
+        legend.text = element_text(color = "white"),
+        legend.title = element_text(color = "white"),
+        plot.subtitle = element_text(color="white"),
+        legend.position = "")+
+   annotate("text", x = 1, y = .15, label = "Artificial (30C)", color = "grey70", fontface = "bold")+
+  annotate("text", x = 6, y = .4, label = "Natural (30C)", color = "green", fontface = "bold")
+
+setwd("C:\\Users\\corey\\OneDrive\\Documents\\GitHub\\599_Project1")
+ggsave("NaturalvsAnthro.png", dpi = 300)
 ```
 
 ```{r}
