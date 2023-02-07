@@ -43,12 +43,29 @@ coraldf <- combine(Anth,Nat)
 Temp <- coraldf %>% select(Temperature, Time, Status)
 km.Temp =survfit(Surv(Temp$Time,Temp$Status)~Temp$Temperature)
 
-ggsurvplot(fit=km.Temp, data=Temp,
-           legend = "bottom", risk.table = F,conf.int=T,linetype = "strata", legend.title = "Study Temperatures") +
+p <- ggsurvplot(fit=km.Temp, data=Temp,
+           legend = "bottom", risk.table = F,conf.int=T, legend.title = "Study Temperatures") +
     labs(
-        title="Survival as 26 vs. 30 Degrees C",
-        x="Time Until Death"
+        title="Visualizing the Impact of Global Warming on Coral Populations",
+        x="Time Until Coral Death (Weeks)"
     ) 
+
+p$plot + scale_colour_manual(values = c("red", "turquoise1"))+
+  theme(panel.background = element_rect(fill = "grey12"),
+        plot.background = element_rect(fill="grey12"),
+        axis.text.x=element_text(colour="white"),
+        axis.text.y=element_text(colour="white"),
+        plot.title = element_text(colour = "white"),
+        axis.title.x = element_text(colour = "white"),
+        axis.title.y = element_text(colour = "white"),
+        axis.line.x = element_line(color="white"),
+        axis.line.y = element_line(color="white"))
+
+#add annotation labels for the temp groups
+#fix legend background
+
+p$plot
+
 ```
 
 ```{r}
