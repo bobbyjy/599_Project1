@@ -71,10 +71,10 @@ p$plot + scale_colour_manual(values = c("turquoise1", "red"))+
 
 #add annotation labels for the temp groups
 #fix legend background
-setwd("C:\\Users\\corey\\OneDrive\\Documents\\GitHub\\599_Project1")
-ggsave("GlobalWarmingImpact.png", dpi = 300)
+# setwd("C:\\Users\\corey\\OneDrive\\Documents\\GitHub\\599_Project1")
+# ggsave("GlobalWarmingImpact.png", dpi = 300)
 
-
+survdiff(Surv(Temp$Time,Temp$Status)~Temp$Temperature)
 ```
 
 ```{r}
@@ -107,10 +107,9 @@ p2$plot+  scale_colour_manual(values = c("turquoise1", "magenta","green","yellow
         legend.title = element_text(color = "white"),
         plot.subtitle = element_text(color="white"))
 
-setwd("C:\\Users\\corey\\OneDrive\\Documents\\GitHub\\599_Project1")
-ggsave("NaturalSedimentLevels.png", dpi = 300)
-  # annotate("text", x = 2, y = .25, label = "30C Group", color = "red", fontface = "bold")+
-  #annotate("text", x = 6, y = .65, label = "26C Group", color = "turquoise1", fontface = "bold")
+# setwd("C:\\Users\\corey\\OneDrive\\Documents\\GitHub\\599_Project1")
+# ggsave("NaturalSedimentLevels.png", dpi = 300)
+survdiff(Surv(Nat30$Time,Nat30$Status)~Nat30$Sediment)
 ```
 ```{r}
 #compare between Anth at different sediment levels 
@@ -155,8 +154,10 @@ p3$plot+ scale_colour_manual(values = c("green", "grey70"))+
    annotate("text", x = 1, y = .15, label = "Artificial (30C)", color = "grey70", fontface = "bold")+
   annotate("text", x = 6, y = .4, label = "Natural (30C)", color = "green", fontface = "bold")
 
-setwd("C:\\Users\\corey\\OneDrive\\Documents\\GitHub\\599_Project1")
-ggsave("NaturalvsAnthro.png", dpi = 300)
+# setwd("C:\\Users\\corey\\OneDrive\\Documents\\GitHub\\599_Project1")
+# ggsave("NaturalvsAnthro.png", dpi = 300)
+
+survdiff(Surv(Both30$Time,Both30$Status)~Both30$anthro)
 ```
 
 ```{r}
@@ -164,12 +165,36 @@ ggsave("NaturalvsAnthro.png", dpi = 300)
 Both26 <- coraldf %>% filter(Temperature ==26)
 km.Both26 =survfit(Surv(Both26$Time,Both26$Status)~Both26$anthro)
 
-ggsurvplot(fit=km.Both26, data=Both26,
-           legend = "bottom", risk.table = F,conf.int=F,linetype = "strata", legend.title = "Anth or Nat", surv.median.line = "v") +
+p4 <- ggsurvplot(fit=km.Both26, data=Both26,
+           legend = "bottom", risk.table = F,conf.int=F, legend.title = "Anth or Nat", surv.median.line = "v") +
     labs(
-        title="Anthro vs. Natural at 26 Degrees C",
+        title="Anthro vs. Natural at Low Temp (26C)",
         x="Time Until Death"
     ) 
+
+p4$plot + scale_colour_manual(values = c("green", "grey70"))+
+  theme(panel.background = element_rect(fill = "grey12"),
+        plot.background = element_rect(fill="grey12"),
+        axis.text.x=element_text(colour="white"),
+        axis.text.y=element_text(colour="white"),
+        plot.title = element_text(colour = "white"),
+        axis.title.x = element_text(colour = "white"),
+        axis.title.y = element_text(colour = "white"),
+        axis.line.x = element_line(color="white"),
+        axis.line.y = element_line(color="white"),
+        legend.key = element_rect(fill = "grey12"),
+        legend.background = element_rect(fill="grey12"),
+        legend.text = element_text(color = "white"),
+        legend.title = element_text(color = "white"),
+        plot.subtitle = element_text(color="white"),
+        legend.position = "")+
+   annotate("text", x = 2, y = .4, label = "Artificial (26C)", color = "grey70", fontface = "bold")+
+  annotate("text", x = 6, y = .6, label = "Natural (26C)", color = "green", fontface = "bold")
+
+# setwd("C:\\Users\\corey\\OneDrive\\Documents\\GitHub\\599_Project1")
+# ggsave("NaturalvsAnthroLowTemp.png", dpi = 300)
+
+survdiff(Surv(Both26$Time,Both26$Status)~Both26$anthro)
 ```
 
 
